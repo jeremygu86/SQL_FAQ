@@ -12,7 +12,9 @@
 
 #### Good resources
 [Good book](http://java67.blogspot.com.by/2013/04/10-frequently-asked-sql-query-interview-questions-answers-database.html)
+
 [Online SQL interviews](http://www.toptal.com/sql/interview-questions)
+
 [Online SQL: SQLfiddle](http://sqlfiddle.com/)
 
 
