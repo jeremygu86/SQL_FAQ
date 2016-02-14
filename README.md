@@ -74,6 +74,11 @@ WHERE END_YEAR = (SELECT MAX(END_YEAR)  -- FOR EACH SIN
 
 ##### Appendix 
 
+
+###### Common mistakes
+
+Missing group by
+
 ###### Good resources
 
 [Learning SQL](http://www.amazon.com/Learning-SQL-Alan-Beaulieu/dp/0596520832/ref=sr_1_1?s=books&ie=UTF8&qid=1455490909&sr=1-1&keywords=Learning+sql)
