@@ -8,18 +8,16 @@
 
 
 
-#### Common interview questions
+#### Frequent interview questions
 
-
-
-
-
-
+#### Good resources
+[Good book](http://java67.blogspot.com.by/2013/04/10-frequently-asked-sql-query-interview-questions-answers-database.html)
+[Online SQL interviews](http://www.toptal.com/sql/interview-questions)
 [Online SQL: SQLfiddle](http://sqlfiddle.com/)
 
 
 ##### Appendix 
-##:** #### Hive Syntax
+###### Hive Syntax
 
 ```sql
 SELECT [ALL | DISTINCT] select_expr, select_expr, ...
