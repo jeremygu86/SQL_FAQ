@@ -6,19 +6,51 @@
 
  **Latest update:** Feb 14, 2016
 
-
+This document is the reading notes for two books [Learning SQL](http://www.amazon.com/Learning-SQL-Alan-Beaulieu/dp/0596520832/ref=sr_1_1?s=books&ie=UTF8&qid=1455490909&sr=1-1&keywords=Learning+sql) and [Joe Celko's SQL Puzzles and Answers](http://www.amazon.com/Puzzles-Answers-Kaufmann-Management-Systems/dp/0123735963/ref=sr_1_1?s=books&ie=UTF8&qid=1455490957&sr=1-1&keywords=SQL+Puzzle).
 
 #### Frequent interview questions
 
-#### Good resources
-[Good book](http://java67.blogspot.com.by/2013/04/10-frequently-asked-sql-query-interview-questions-answers-database.html)
+[10] Telephone 
+
+- The SIN column is the Social Insurance Number, which is something like the Social Security Number (SSN) used in the United States to identify taxpayers. 
+
+- The pen_year column is the calendar year of the pension.
+
+- The month_cnt column is the number of months in that year the person worked.
+
+- The earnings is the person’s total earnings for the year.
+
+The problem is to find the total earnings of each employee for the most recent 60 months of month_cnt in consecutive years. This number is used to compute the employee’s pension. The shortest period going back could be 5 years, with 12 months in each year applying to the total month_cnt. The longest period could be 60 years, with 1 month in each year. Some people might work four years and not the fifth, and thus not qualify for a pension at all.
+
+The reason this is a beast to solve is that "most recent" and "consecutive" are hard to write in SQL.
+
+**HINT**: _For each employee in each year, insert a row even in the years in which the employee did not work. It not only makes the query easier, but you also have a record to update when you get in new information._
+
+
+```
+CREATE TABLE Pensions
+        (sin CHAR(10) NOT NULL,
+         pen_year INTEGER NOT NULL,
+         month_cnt INTEGER DEFAULT 0 NOT NULL
+             CHECK (month_cnt BETWEEN 0 AND 12),
+         earnings DECIMAL (8,2) DEFAULT 0.00 NOT NULL);
+```
+
+
+##### Appendix 
+
+###### Good resources
+
+[Learning SQL](http://www.amazon.com/Learning-SQL-Alan-Beaulieu/dp/0596520832/ref=sr_1_1?s=books&ie=UTF8&qid=1455490909&sr=1-1&keywords=Learning+sql)
+
+- Lost notes.
+
+[Joe Celko's SQL Puzzles and Answers](http://www.amazon.com/Puzzles-Answers-Kaufmann-Management-Systems/dp/0123735963/ref=sr_1_1?s=books&ie=UTF8&qid=1455490957&sr=1-1&keywords=SQL+Puzzle).
 
 [Online SQL interviews](http://www.toptal.com/sql/interview-questions)
 
 [Online SQL: SQLfiddle](http://sqlfiddle.com/)
 
-
-##### Appendix 
 ###### Hive Syntax
 
 ```sql
