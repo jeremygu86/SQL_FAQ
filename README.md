@@ -10,7 +10,7 @@ This document is the reading notes for two books [Learning SQL](http://www.amazo
 
 #### Frequent interview questions
 
-[10] Telephone 
+**[Pr10]** Telephone 
 
 - The SIN column is the Social Insurance Number, which is something like the Social Security Number (SSN) used in the United States to identify taxpayers. 
 
@@ -20,7 +20,7 @@ This document is the reading notes for two books [Learning SQL](http://www.amazo
 
 - The earnings is the person’s total earnings for the year.
 
-The problem is to find the total earnings of each employee for the most recent 60 months of month_cnt in consecutive years. This number is used to compute the employee’s pension. The shortest period going back could be 5 years, with 12 months in each year applying to the total month_cnt. The longest period could be 60 years, with 1 month in each year. Some people might work four years and not the fifth, and thus not qualify for a pension at all.
+The problem is to find the total earnings of each employee for the **most recent 60 months** of month_cnt in **consecutive** years. This number is used to compute the employee’s pension. The shortest period going back could be 5 years, with 12 months in each year applying to the total month_cnt. The longest period could be 60 years, with 1 month in each year. Some people might work four years and not the fifth, and thus not qualify for a pension at all.
 
 The reason this is a beast to solve is that "most recent" and "consecutive" are hard to write in SQL.
 
@@ -34,6 +34,40 @@ CREATE TABLE Pensions
          month_cnt INTEGER DEFAULT 0 NOT NULL
              CHECK (month_cnt BETWEEN 0 AND 12),
          earnings DECIMAL (8,2) DEFAULT 0.00 NOT NULL);
+```
+
+Analysis on the solutions:
+
+1. Solution 1
+
+1.1 Make intervals. SIN, start_year, end_year, total_earn 
+
+1.2 Whether consecutive. if_consec
+
+1.3 Structure
+
+```
+WITH TMR AS (
+SELECT T1.SIN, T1.PEN_YEAR START_YEAR, T2.PEN_YEAR END_YEAR,
+	(SELECT SUM(earnings) 
+		FROM Pensions T3
+		WHERE T3.SIN = T1.SIN
+		AND T3.PEN_YEAR between  T1.PEN_YEAR and T2.PEN_YEAR) total_earning
+
+FROM Pensions T1, Pensions T2
+WHERE T1.SIN = T2.SIN
+	AND T2.PEN_YEAR >= P1.PEN_YEAR - 4 -- most recent 60 months >= years 
+	AND 0<ALL (SELECT month_cnt from Pensions T4 where
+	T4.SIN  = T1.SIN and T4.PEN YEAR BETWEEN  T1.PEN_YEAR and T2.PEN_YEAR) -- between start_year and end_year, month_cnt > 0 in each year
+	AND 60 <= (SELECT SUM(month_cnt) from Pensions T4 where
+	T4.SIN  = T1.SIN and T4.PEN YEAR BETWEEN  T1.PEN_YEAR and T2.PEN_YEAR)
+)
+
+SELECT * FROM TMR
+WHERE END_YEAR = (SELECT MAX(END_YEAR)  -- FOR EACH SIN
+				 FROM TMR AS T5 
+				 WHERE T5.SIN = TMR.SIN)
+;
 ```
 
 
