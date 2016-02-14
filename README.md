@@ -38,13 +38,13 @@ CREATE TABLE Pensions
 
 Analysis on the solutions:
 
-1. Solution 1
+**1. Solution 1**
 
-- 1 Make intervals. SIN, start_year, end_year, total_earn 
+- 1) Make intervals. SIN, start_year, end_year, total_earn 
 
-- 2 Whether consecutive. if_consec
+- 2) Whether consecutive. if_consec
 
-- 3 Structure of the code (at row level)
+- 3) Structure of the code (at row level)
 
 
 ```
