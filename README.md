@@ -1,16 +1,48 @@
 # SQL_FAQ
 
- **Author: Wenxiao Jeremy Gu** 
+**Author: Wenxiao Jeremy Gu** 
 
- <jeremygu86@gmail.com>
+<jeremygu86@gmail.com>
 
- **Latest update:** Feb 14, 2016
+**Latest update:** Feb 18, 2016
 
 This document is the reading notes for two books [Learning SQL](http://www.amazon.com/Learning-SQL-Alan-Beaulieu/dp/0596520832/ref=sr_1_1?s=books&ie=UTF8&qid=1455490909&sr=1-1&keywords=Learning+sql) and [Joe Celko's SQL Puzzles and Answers](http://www.amazon.com/Puzzles-Answers-Kaufmann-Management-Systems/dp/0123735963/ref=sr_1_1?s=books&ie=UTF8&qid=1455490957&sr=1-1&keywords=SQL+Puzzle).
 
 #### Frequent interview questions
 
-**[Pr10]** Telephone 
+
+**[Pr14]** Telephone directory
+
+** outter join and NULL value**
+
+Suppose you are trying to set up an office telephone directory with your new database publishing system, and you have the following tables:
+
+```sql
+        CREATE TABLE Personnel
+        (emp_id INTEGER PRIMARY KEY,
+         first_name CHAR(20) NOT NULL,
+         last_name CHAR(20) NOT NULL);
+        CREATE TABLE Phones
+        (emp_id INTEGER NOT NULL,
+         phone_type CHAR(3) NOT NULL
+                 CHECK (phone_type IN ('hom', 'fax')),
+         phone_nbr CHAR(12) NOT NULL,
+         PRIMARY KEY (emp_id, phone_type),
+         FOREIGN KEY emp_id REFERENCES Personnel(emp_id));
+```
+
+*Business question*
+
+The codes 'hom' and 'fax' indicate whether the number is the employee’s home phone number or a fax number. You want to print out a report with one line per employee that gives both numbers, and shows a NULL if either or both numbers are missing.
+
+I should note here that the FOREIGN KEY constraint on the Phones table means that you cannot list a telephone number for someone who is not an employee. The PRIMARY KEY looks a bit large until you stop and think about all the cases. Married personnel could share the same fax or home telephones, and a single line could be both voice and fax services.
+
+
+
+
+**[Pr10]** Telephone
+
+**This question talks about how to look at data ar row level.**
 
 - The SIN column is the Social Insurance Number, which is something like the Social Security Number (SSN) used in the United States to identify taxpayers. 
 
@@ -20,6 +52,8 @@ This document is the reading notes for two books [Learning SQL](http://www.amazo
 
 - The earnings is the person’s total earnings for the year.
 
+*Business question*
+
 The problem is to find the total earnings of each employee for the **most recent 60 months** of month_cnt in **consecutive** years. This number is used to compute the employee’s pension. The shortest period going back could be 5 years, with 12 months in each year applying to the total month_cnt. The longest period could be 60 years, with 1 month in each year. Some people might work four years and not the fifth, and thus not qualify for a pension at all.
 
 The reason this is a beast to solve is that "most recent" and "consecutive" are hard to write in SQL.
@@ -27,7 +61,7 @@ The reason this is a beast to solve is that "most recent" and "consecutive" are 
 **HINT**: _For each employee in each year, insert a row even in the years in which the employee did not work. It not only makes the query easier, but you also have a record to update when you get in new information._
 
 
-```
+```sql
 CREATE TABLE Pensions
         (sin CHAR(10) NOT NULL,
          pen_year INTEGER NOT NULL,
