@@ -1,4 +1,4 @@
-# SQL_FAQ
+# SQL Questions
 
 **Author: Wenxiao Jeremy Gu** 
 
@@ -13,16 +13,16 @@ This document is the reading notes for two books [Learning SQL](http://www.amazo
 
 **[Pr14]** Telephone directory
 
-** outter join and NULL value**
+**outter join and NULL value**
 
 Suppose you are trying to set up an office telephone directory with your new database publishing system, and you have the following tables:
 
 ```sql
-        CREATE TABLE Personnel
+    CREATE TABLE Personnel
         (emp_id INTEGER PRIMARY KEY,
          first_name CHAR(20) NOT NULL,
          last_name CHAR(20) NOT NULL);
-        CREATE TABLE Phones
+    CREATE TABLE Phones
         (emp_id INTEGER NOT NULL,
          phone_type CHAR(3) NOT NULL
                  CHECK (phone_type IN ('hom', 'fax')),
@@ -35,12 +35,14 @@ Suppose you are trying to set up an office telephone directory with your new dat
 
 The codes 'hom' and 'fax' indicate whether the number is the employee’s home phone number or a fax number. You want to print out a report with one line per employee that gives both numbers, and shows a NULL if either or both numbers are missing.
 
-I should note here that the FOREIGN KEY constraint on the Phones table means that you cannot list a telephone number for someone who is not an employee. The PRIMARY KEY looks a bit large until you stop and think about all the cases. Married personnel could share the same fax or home telephones, and a single line could be both voice and fax services.
+**Note that** 
+
+- The FOREIGN KEY constraint on the Phones table means that you cannot list a telephone number for someone who is not an employee. The PRIMARY KEY looks a bit large until you stop and think about all the cases. Married personnel could share the same fax or home telephones, and a single line could be both voice and fax services.
 
 
 
 
-**[Pr10]** Telephone
+**[Pr10]** Calculation of the recent xx months
 
 **This question talks about how to look at data ar row level.**
 
