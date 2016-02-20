@@ -31,18 +31,80 @@ Suppose you are trying to set up an office telephone directory with your new dat
          phone_nbr CHAR(12) NOT NULL,
          PRIMARY KEY (emp_id, phone_type),
          FOREIGN KEY emp_id REFERENCES Personnel(emp_id));
+         
+                  
+         -- http://sqlfiddle.com/ code
 ```
 
 *Business question*
 
-The codes 'hom' and 'fax' indicate whether the number is the employee’s home phone number or a fax number. You want to print out a report with one line per employee that gives both numbers, and shows a NULL if either or both numbers are missing.
+The codes 'hom' and 'fax' indicate whether the number is the employee’s home phone number or a fax number. 
+
+You want to print out a report with one line per employee that gives both numbers, and shows a NULL if either or both numbers are missing.
 
 **Note that** 
 
 - The FOREIGN KEY constraint on the Phones table means that you cannot list a telephone number for someone who is not an employee. The PRIMARY KEY looks a bit large until you stop and think about all the cases. Married personnel could share the same fax or home telephones, and a single line could be both voice and fax services.
 
 
+** First Try **
 
+1. temporary table A: Join the two tables (outer join)
+```sql
+	with A as (
+		select personnel.*, phones.* from personnel
+		outer join phones on personnel.emp_id = phones.emp_id
+	)
+```
+2. calculate the nulls per emp_id. if ==2 report 1; if <2 report 2.
+
+
+** Standard solution 1: look at each of the phone types; then combine**
+
+1. Left outer join because we want the people to be employees! (Because you want to see all the personnel, you need an OUTER JOIN)
+
+2. 
+
+```sql
+-- PARTIAL solution
+SELECT E1.last_name, E1.first_name,
+       H1.phone_nbr AS Home,
+       F1.phone_nbr AS FAX
+ FROM Personnel AS E1
+        
+ LEFT OUTER JOIN
+        Phones AS H1
+        ON E1.emp_id = H1.emp_id
+           AND H1.phone_type = 'hom' -- only home number
+ LEFT OUTER JOIN
+       Phones AS F1  -- outer join fax number
+       ON E1.emp_id = F1.emp_id
+          AND F1.phone_type = 'fax';
+-- My solution
+with A as (
+select E1.last_name, E1.first_name,
+		H1.phone_nbr as Home
+		F1.phone_nbr as FAX
+from 
+
+Personnel E1
+
+left outer join phones H1
+on E1.emp_id = F1.emp_id AND H1.phone_type = 'hom'
+
+left outer join phones F1 -- extra columns wrt row
+on E1.emp_id = F1.emp_id AND F1.phone_type = 'fax'
+)
+select last_name, first_name from A
+where HOME is null or FAX is null
+group by 1,2
+;
+
+select last_name, first_name from A
+where HOME is not null and FAX is not null
+group by 1,2;
+
+```
 
 ##### **[Pr10]** Calculation of the recent xx months
 
@@ -71,7 +133,7 @@ CREATE TABLE Pensions
          pen_year INTEGER NOT NULL,
          month_cnt INTEGER DEFAULT 0 NOT NULL
              CHECK (month_cnt BETWEEN 0 AND 12),
-         earnings DECIMAL (8,2) DEFAULT 0.00 NOT NULL);
+         earnings DECIMAL (8,2) DEFAULT 0.00 NOT NULL);         
 ```
 
 Analysis on the solutions:
