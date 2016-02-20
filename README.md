@@ -13,7 +13,7 @@ This document is also the reading notes for two books [Learning SQL](http://www.
 #### Frequent interview questions
 
 
-**[Pr14]** Telephone directory
+##### **[Pr14]** Telephone directory
 
 **outter join and NULL value**
 
@@ -44,7 +44,7 @@ The codes 'hom' and 'fax' indicate whether the number is the employee’s home p
 
 
 
-**[Pr10]** Calculation of the recent xx months
+##### **[Pr10]** Calculation of the recent xx months
 
 **This question talks about how to look at data ar row level.**
 
