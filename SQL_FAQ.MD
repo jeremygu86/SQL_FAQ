@@ -256,6 +256,102 @@ WHERE END_YEAR = (SELECT MAX(END_YEAR)  -- FOR EACH SIN
 				 FROM TMR AS T5 
 				 WHERE T5.SIN = TMR.SIN)
 ;
+
+-- Small problem 4!! Very good and comprehensive
+
+create table ex4_users (
+user_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+username varchar(255)
+);
+
+create table training_details(
+user_training_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+user_id int,
+training_id int,
+training_date date
+);
+
+insert into ex4_users(username) values ("John Doe");
+insert into ex4_users(username) values ("Jane Don"),("Alice Jones"),("Lisa Romero");
+
+insert into training_details(user_id, training_id, training_date) values 
+(1,1,"2015-08-02"),
+(2,1,"2015-08-03"),
+(3,2,"2015-08-02"),
+(4,2,"2015-08-04"),
+(2,2,"2015-08-03"),
+(1,1,"2015-08-02"),
+(3,2,"2015-08-04"),
+(4,3,"2015-08-03"),
+(1,4,"2015-08-03"),
+(3,1,"2015-08-02"),
+(4,2,"2015-08-04"),
+(3,2,"2015-08-02"),
+(1,1,"2015-08-02"),
+(4,3,"2015-08-03");
+
+
+-- Write a query to to get the list of users who took the a training lesson more than once in the same day, 
+-- grouped by user and training lesson,
+-- each ordered from the most recent lesson date to oldest date.
+
+-- Official solution
+SELECT
+      u.user_id,
+      username,
+      training_id,
+      training_date,
+      count( user_training_id ) AS count
+  FROM ex4_users u JOIN training_details t ON t.user_id = u.user_id
+  GROUP BY user_id,
+           training_id,
+           training_date
+  HAVING count( user_training_id ) > 1
+  ORDER BY training_date DESC;
+
+-- My solution
+-- Be careful when grouping. Group the samllist level
+select u.*, training_date,training_id, count(user_training_id) from training_details t
+-- select u.*, training_date, count(training_id) from training_details t
+join ex4_users u ON t.user_id = u.user_id
+group by 1,2,3,4
+having count(user_training_id)>1
+order by training_date desc;
+
+-- Small problem 5. Rank and partition
+-- (Not supported by MySQL)
+create table ex5_grade_rank (
+name varchar(255),
+math int,
+english int,
+handover_datetime  DATETIME DEFAULT NULL);
+
+-- if total is the same, higher math, higher rank. If the same, who handover early, the higher rank.
+ 
+
+insert into ex5_grade_rank values 
+("Mei",95,95,"2015-05-01 10:30:25"),
+("Fei",95,95,"2015-05-01 10:50:20"),
+("Ming",100,90,"2015-05-01 10:20:25"),
+("Lei",90,100,"2015-05-01 10:40:25"),
+("Fang",100,75,"2015-05-01 10:10:25"),
+("Ning",98,92,"2015-05-01 9:55:25"),
+("Han",100,80,"2015-05-01 11:00:25");
+
+CREATE TABLE ex5_person (id int, first_name varchar(20), age int, gender char(1));
+
+INSERT INTO ex5_person VALUES (1, 'Bob', 25, 'M');
+INSERT INTO ex5_person VALUES (2, 'Jane', 20, 'F');
+INSERT INTO ex5_person VALUES (3, 'Jack', 30, 'M');
+INSERT INTO ex5_person VALUES (4, 'Bill', 32, 'M');
+INSERT INTO ex5_person VALUES (5, 'Nick', 22, 'M');
+INSERT INTO ex5_person VALUES (6, 'Kathy', 18, 'F');
+INSERT INTO ex5_person VALUES (7, 'Steve', 36, 'M');
+INSERT INTO ex5_person VALUES (8, 'Anne', 25, 'F');
+
+select * from ex5_person;
+
+
 ```
 
 
